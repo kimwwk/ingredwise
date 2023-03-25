@@ -6,7 +6,23 @@ const app = express();
 
 // Set up multer to handle file uploads
 const upload = multer();
+//function list
+//Parse and concatenate the text for the OCR response
+function ParseOCRJson(json) {
+  const result = [];
 
+  for (const region of json.regions) {
+    for (const line of region.lines) {
+      let lineText = '';
+      for (const word of line.words) {
+        lineText += ' ' + word.text;
+      }
+      result.push(lineText.trim());
+    }
+  }
+
+  return result;
+}
 // TODO: env file
 // require('dotenv').config();
 
