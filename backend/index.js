@@ -6,16 +6,17 @@ const app = express();
 
 // Set up multer to handle file uploads
 const upload = multer();
+
 //function list
 //Parse and concatenate the text for the OCR response
-function ParseOCRJson(json) {
+function parseOCRJson(json) {
   const result = [];
 
   for (const region of json.regions) {
     for (const line of region.lines) {
-      let lineText = '';
+      let lineText = "";
       for (const word of line.words) {
-        lineText += ' ' + word.text;
+        lineText += " " + word.text;
       }
       result.push(lineText.trim());
     }
@@ -42,9 +43,8 @@ async function checkIngredients(file) {
       data: file.buffer,
     });
 
-    // extract description from response data
-    console.log("response", response);
-    const result = response;
+    const result = parseOCRJson(response.data);
+
     return result;
   } catch (error) {
     console.error(error);
@@ -53,15 +53,16 @@ async function checkIngredients(file) {
 }
 
 // Define the /api/ingredient-check endpoint
-app.post("/api/ingredient-check", upload.single("file"), (req, res) => {
+app.post("/api/ingredient-check", upload.single("file"), async (req, res) => {
   // Handle the file upload
   const file = req.file;
   console.log("file", file);
 
-  checkIngredients(file);
+  const result = await checkIngredients(file);
 
   // Send a response
-  res.send("File uploaded!");
+  console.info(result);
+  res.send(result);
 });
 
 // Start the server
