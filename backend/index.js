@@ -1,6 +1,6 @@
-const express = require('express');
-const multer = require('multer');
-const axios = require('axios');
+const express = require("express");
+const multer = require("multer");
+const axios = require("axios");
 
 const app = express();
 
@@ -11,23 +11,24 @@ const upload = multer();
 // require('dotenv').config();
 
 const API_KEY = "***REMOVED***"; // replace with your actual API key
-const ENDPOINT = '***REMOVED***';
+const ENDPOINT =
+  "***REMOVED***";
 
 async function checkIngredients(file) {
   try {
     const response = await axios({
-      method: 'post',
+      method: "post",
       url: ENDPOINT,
       headers: {
-        'Content-Type': 'application/octet-stream',
-        'Ocp-Apim-Subscription-Key': API_KEY
+        "Content-Type": "application/octet-stream",
+        "Ocp-Apim-Subscription-Key": API_KEY,
       },
-      data: file
+      data: file.buffer,
     });
 
     // extract description from response data
-    console.info('response',response);
-    const result = response.json();
+    console.log("response", response);
+    const result = response;
     return result;
   } catch (error) {
     console.error(error);
@@ -36,18 +37,18 @@ async function checkIngredients(file) {
 }
 
 // Define the /api/ingredient-check endpoint
-app.post('/api/ingredient-check', upload.single('file'), (req, res) => {
+app.post("/api/ingredient-check", upload.single("file"), (req, res) => {
   // Handle the file upload
   const file = req.file;
-  console.log(file);
-  
-  checkIngredients(file)
+  console.log("file", file);
+
+  checkIngredients(file);
 
   // Send a response
-  res.send('File uploaded!');
+  res.send("File uploaded!");
 });
 
 // Start the server
 app.listen(3000, () => {
-  console.log('Server listening on port 3000!');
+  console.log("Server listening on port 3000!");
 });
