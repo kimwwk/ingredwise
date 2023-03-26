@@ -1,7 +1,6 @@
 const express = require("express");
 const multer = require("multer");
 const axios = require("axios");
-// import { Configuration, OpenAIApi } from "openai";
 // const path = require("path");
 
 const app = express();
@@ -17,7 +16,50 @@ async function getNutritionInfoJson(ocrText) {
   const OPENAI_ENDPOINT = "***REMOVED***";
   const OPENAI_API_KEY = "***REMOVED***";
 
-  const prompts = `OCR text:\n${ocrText}\n\nConvert the nutritional information into JSON format:`;
+  const prompts = `OCR text:\n${ocrText}
+  ---
+  Please generate a JSON object that adheres to the following structure and naming conventions, the 3 keys should form its own key and not under each other:
+  A "nutrition" key containing an array of objects. Each object must have:
+  A "name" key (string) representing the nutrient name (e.g., "calories", "fat", "saturated_fat", "trans_fat", "sodium", "carbohydrates", "sugars", "fiber", "vitamin_a").
+  An "amount" key (string) representing the amount of the nutrient (e.g., "160", "12", "4.5").
+  A "unit" key (string) representing the unit of measurement (e.g., "kJ", "g", "mg"), if there’s no unit please use “N/A” instead.
+  An "ingredients" key containing an array of strings, each representing an ingredient (e.g., "pork”,”beef", "water").
+  An "additional_information" key containing an object with the following optional keys:
+  "brand" (string) representing the brand name (e.g., "Harvest Meats").
+  "msg_free" (boolean) indicating whether the product is MSG-free (e.g., true or false).
+  Please ensure the JSON object follows the specified structure and naming conventions.`;
+
+  const response = await axios({
+    method: "post",
+    url: OPENAI_ENDPOINT,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${OPENAI_API_KEY}`,
+    },
+    data: {
+      model: "gpt-3.5-turbo",
+      messages: [{ role: "user", content: prompts }],
+      max_tokens: 500,
+    },
+  });
+
+  if (response.status != 200) {
+    throw new Error("Failed to fetch from OpenAI API");
+  }
+
+  const result = response.data;
+  console.log("openAI result", result);
+  const nutritionInfoJson = result.choices[0]?.message.content;
+
+  // Parse the JSON string returned by the API
+  return JSON.parse(nutritionInfoJson);
+}
+
+async function getSuggestions(information) {
+  const OPENAI_ENDPOINT = "***REMOVED***";
+  const OPENAI_API_KEY = "***REMOVED***";
+
+  const prompts = `OCR text:\n${information}\n\nbased on the info, any risks from food safety and any suggestions?`;
 
   // const configuration = new Configuration({
   //   organization: "YOUR_ORG_ID",
@@ -36,20 +78,17 @@ async function getNutritionInfoJson(ocrText) {
     data: {
       model: "gpt-3.5-turbo",
       messages: [{ role: "user", content: prompts }],
+      max_tokens: 500,
     },
   });
 
-  console.log(response);
   if (response.status != 200) {
     throw new Error("Failed to fetch from OpenAI API");
   }
 
   const result = response.data;
   console.log("openAI result", result);
-  const nutritionInfoJson = result.choices[0]?.message.content;
-
-  // Parse the JSON string returned by the API
-  return JSON.parse(nutritionInfoJson);
+  return result.choices[0]?.message.content;
 }
 
 //Parse and concatenate the text for the OCR response
@@ -107,8 +146,11 @@ app.post("/api/ingredient-check", upload.single("file"), async (req, res) => {
   const openAiResult = await getNutritionInfoJson(ocrResult);
   console.info(openAiResult);
 
+  const openAiResult2 = await getSuggestions(ocrResult);
+  console.info(openAiResult2);
+
   // Send a response
-  res.send(openAiResult);
+  res.send({ nutritionResult: openAiResult, suggestion: openAiResult2 });
 });
 
 // Start the server
