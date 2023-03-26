@@ -18,16 +18,20 @@ async function getNutritionInfoJson(ocrText) {
 
   const prompts = `OCR text:\n${ocrText}
   ---
-  Please generate a JSON object that adheres to the following structure and naming conventions, the 3 keys should form its own key and not under each other:
-  A "nutrition" key containing an array of objects. Each object must have:
-  A "name" key (string) representing the nutrient name (e.g., "calories", "fat", "saturated_fat", "trans_fat", "sodium", "carbohydrates", "sugars", "fiber", "vitamin_a").
-  An "amount" key (string) representing the amount of the nutrient (e.g., "160", "12", "4.5").
-  A "unit" key (string) representing the unit of measurement (e.g., "kJ", "g", "mg"), if there’s no unit please use “N/A” instead.
-  An "ingredients" key containing an array of strings, each representing an ingredient (e.g., "pork”,”beef", "water").
-  An "additional_information" key containing an object with the following optional keys:
-  "brand" (string) representing the brand name (e.g., "Harvest Meats").
-  "msg_free" (boolean) indicating whether the product is MSG-free (e.g., true or false).
-  Please ensure the JSON object follows the specified structure and naming conventions.`;
+  Generate a JSON object with the following 3 objects while naming convention is snake case (snake_case)
+
+  1.
+  "nutrition" key (array of objects), each contains 
+  - "name" (string) represents the nutrient name (e.g., "vitamin_b1", "vitamin_c", "saturated_fat", "trans_fat")
+  - "amount" (string) represents the amount of the nutrient (e.g., "160", "12", "4.5"), if there's none leave it empty ("")
+  - "unit" (string) represents the unit of measurement (e.g., "kJ", "g", "mg"), if there's no unit leave it empty ("")
+
+  3.
+  "ingredients" key (array of strings) represents the product's ingredients (e.g., ["pork", "beef", "water"])
+  
+  4.
+  "additional_info" key (object) represents other information with optional keys (e.g. "brand" (string), "msg_free" (boolean))
+  `;
 
   const response = await axios({
     method: "post",
@@ -39,7 +43,7 @@ async function getNutritionInfoJson(ocrText) {
     data: {
       model: "gpt-3.5-turbo",
       messages: [{ role: "user", content: prompts }],
-      max_tokens: 500,
+      max_tokens: 1000,
     },
   });
 
