@@ -1,13 +1,8 @@
+import React, { useRef } from "react";
 import "./App.css";
 
 function App() {
-  function handleDrop(event) {
-    event.preventDefault();
-    const files = event.dataTransfer
-      ? event.dataTransfer.files
-      : event.target.files;
-    uploadFile(files[0]);
-  }
+  const fileInputRef = useRef(null);
 
   function displayResponseText(responseText) {
     const responseContainer = document.querySelector("#response-text-display");
@@ -36,14 +31,14 @@ function App() {
     xhr.send(formData);
   }
 
-  function handleSubmit(event) {
-    event.preventDefault();
-    const fileInput = document.createElement("input");
-    fileInput.type = "file";
-    fileInput.accept = "image/*";
-    fileInput.onchange = handleDrop;
-    fileInput.click();
-  }
+  const handleClick = () => {
+    fileInputRef.current.click();
+  };
+
+  const handleFileUpload = () => {
+    const file = fileInputRef.current.files[0];
+    uploadFile(file);
+  };
 
   return (
     <>
@@ -55,7 +50,15 @@ function App() {
         <div class="dropzone">
           <p>Drag and drop an image here, or click to select a file</p>
         </div>
-        <button class="submit-button">Check Ingredients</button>
+        <input
+          type="file"
+          ref={fileInputRef}
+          style={{ display: "none" }}
+          onChange={handleFileUpload}
+        />
+        <button class="submit-button" onClick={handleClick}>
+          Check Ingredients
+        </button>
         <div id="response-text-display" class="response-text-display"></div>
       </main>
     </>
