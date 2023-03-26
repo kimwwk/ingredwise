@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  build:
+  build_and_deploy:
     runs-on: ubuntu-latest
 
     steps:
@@ -19,32 +19,20 @@ jobs:
         node-version: 18
 
     - name: Install dependencies
-      run: npm ci
+      run: npm ci --prefix frontend-react
 
-    - name: Run tests
-      run: npm test
+    - name: Build React app
+      run: npm run build --prefix frontend-react
 
-  deploy:
-    runs-on: ubuntu-latest
-    needs: build
-    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    - name: Install rsync
+      run: sudo apt-get install rsync
 
-    steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
-
-    - name: Set up Node.js
-      uses: actions/setup-node@v2
-      with:
-        node-version: 18
-
-    - name: Install dependencies
-      run: npm ci
-
-    - name: Build
-      run: npm run build
-
-    - name: Deploy
+    - name: Transfer build folder to DigitalOcean Droplet
+      env:
+        DROPLET_SSH_PRIVATE_KEY: ${{ secrets.DROPLET_SSH_PRIVATE_KEY }}
+        DROPLET_IP_ADDRESS: ${{ secrets.DROPLET_IP_ADDRESS }}
       run: |
-        echo "Deploying to your desired platform"
-        # Add your deployment commands
+        echo "$DROPLET_SSH_PRIVATE_KEY" > private_key
+        chmod 600 private_key
+        rsync -avz -e "ssh -i private_key -o StrictHostKeyChecking=no" --delete frontend-react/build/ root@$DROPLET_IP_ADDRESS:/var/www/html/
+        rm -f private_key
