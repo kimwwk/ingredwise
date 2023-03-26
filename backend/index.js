@@ -1,6 +1,7 @@
 const express = require("express");
 const multer = require("multer");
 const axios = require("axios");
+// import { Configuration, OpenAIApi } from "openai";
 // const path = require("path");
 
 const app = express();
@@ -13,33 +14,39 @@ const app = express();
 const upload = multer();
 
 async function getNutritionInfoJson(ocrText) {
-  const apiKey = "your_openai_api_key"; // Replace this with your OpenAI API key
-  const prompt = `OCR text:\n${ocrText}\n\nConvert the nutritional information into JSON format:`;
+  const OPENAI_ENDPOINT = "***REMOVED***";
+  const OPENAI_API_KEY = "***REMOVED***";
 
-  const response = await fetch(
-    "https://api.openai.com/v1/engines/davinci-codex/completions",
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${apiKey}`,
-      },
-      body: JSON.stringify({
-        prompt: prompt,
-        max_tokens: 300,
-        n: 1,
-        stop: null,
-        temperature: 0.5,
-      }),
-    }
-  );
+  const prompts = `OCR text:\n${ocrText}\n\nConvert the nutritional information into JSON format:`;
 
-  if (!response.ok) {
+  // const configuration = new Configuration({
+  //   organization: "YOUR_ORG_ID",
+  //   apiKey: process.env.OPENAI_API_KEY,
+  // });
+  // const openai = new OpenAIApi(configuration);
+  // const response = await openai.;
+
+  const response = await axios({
+    method: "post",
+    url: OPENAI_ENDPOINT,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${OPENAI_API_KEY}`,
+    },
+    data: {
+      model: "gpt-3.5-turbo",
+      messages: [{ role: "user", content: prompts }],
+    },
+  });
+
+  console.log(response);
+  if (response.status != 200) {
     throw new Error("Failed to fetch from OpenAI API");
   }
 
-  const data = await response.json();
-  const nutritionInfoJson = data.choices[0]?.text.trim();
+  const result = response.data;
+  console.log("openAI result", result);
+  const nutritionInfoJson = result.choices[0]?.message.content;
 
   // Parse the JSON string returned by the API
   return JSON.parse(nutritionInfoJson);
@@ -93,13 +100,15 @@ async function checkIngredients(file) {
 app.post("/api/ingredient-check", upload.single("file"), async (req, res) => {
   // Handle the file upload
   const file = req.file;
-  console.log("file", file);
 
-  const result = await checkIngredients(file);
+  const ocrResult = await checkIngredients(file);
+  console.info(ocrResult);
+
+  const openAiResult = await getNutritionInfoJson(ocrResult);
+  console.info(openAiResult);
 
   // Send a response
-  console.info(result);
-  res.send(result);
+  res.send(openAiResult);
 });
 
 // Start the server
