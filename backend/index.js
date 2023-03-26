@@ -11,6 +11,38 @@ app.use(express.static(frontendPath));
 // Set up multer to handle file uploads
 const upload = multer();
 
+async function getNutritionInfoJson(ocrText) {
+const apiKey = 'your_openai_api_key'; // Replace this with your OpenAI API key
+const prompt = `OCR text:\n${ocrText}\n\nConvert the nutritional information into JSON format:`;
+
+const response = await fetch('https://api.openai.com/v1/engines/davinci-codex/completions', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+    'Authorization': `Bearer ${apiKey}`,
+  },
+  body: JSON.stringify({
+    prompt: prompt,
+    max_tokens: 300,
+    n: 1,
+    stop: null,
+    temperature: 0.5,
+  }),
+});
+
+if (!response.ok) {
+  throw new Error('Failed to fetch from OpenAI API');
+}
+
+const data = await response.json();
+const nutritionInfoJson = data.choices[0]?.text.trim();
+
+// Parse the JSON string returned by the API
+return JSON.parse(nutritionInfoJson);
+}
+
+
+
 //function list
 //Parse and concatenate the text for the OCR response
 function parseOCRJson(json) {
