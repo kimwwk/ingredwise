@@ -107,6 +107,18 @@
         uploadFile(files[0]);
       }
 
+      function displayResponseText(responseText) {
+        const responseContainer = document.querySelector(
+          "#response-text-display"
+        );
+        responseContainer.innerHTML = "";
+
+        const responseTextString = JSON.stringify(responseText, null, 2); // Stringify the response with indentation
+        const responseTextElement = document.createElement("pre");
+        responseTextElement.textContent = responseTextString;
+        responseContainer.appendChild(responseTextElement);
+      }
+
       function uploadFile(file) {
         const formData = new FormData();
         formData.append("file", file);
@@ -114,18 +126,9 @@
         xhr.open("POST", "/api/ingredient-check");
         xhr.onload = function () {
           if (xhr.status === 200) {
-            alert("File uploaded successfully!");
-            // Parse the JSON response
-            const responseTextArray = JSON.parse(xhr.responseText);
-
-            // Convert the array to a string with line breaks
-            const responseText = responseTextArray.join("<br>");
-
-            // Display the response text in the text display box
-            const responseTextDisplay = document.getElementById(
-              "response-text-display"
-            );
-            responseTextDisplay.innerHTML = responseText;
+            // alert("File uploaded successfully!");
+            const responseText = JSON.parse(xhr.responseText);
+            displayResponseText(responseText);
           } else {
             alert("Error uploading file. Please try again.");
           }
@@ -142,19 +145,6 @@
         fileInput.click();
       }
 
-      function displayResponseText(responseText) {
-        const responseContainer = document.querySelector(".response-container");
-        responseContainer.innerHTML = "";
-
-        const responseList = document.createElement("ul");
-        responseText.forEach((text) => {
-          const listItem = document.createElement("li");
-          listItem.textContent = text;
-          responseList.appendChild(listItem);
-        });
-
-        responseContainer.appendChild(responseList);
-      }
     </script>
   </body>
 </html>
