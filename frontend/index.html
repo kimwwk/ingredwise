@@ -51,6 +51,18 @@
             cursor: pointer;
             margin: 0 auto;
         }
+
+        .response-text-display {
+            border: 1px solid #ccc; /* Outline color */
+            border-radius: 5px; /* Rounded corners */
+            padding: 20px; /* Space between the text and the border */
+            margin: 20px; /* Space between the div and surrounding elements */
+            font-family: Arial, sans-serif; /* Font family */
+            font-size: 16px; /* Font size */
+            line-height: 1.5; /* Line spacing */
+            background-color: #f9f9f9; /* Background color */
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24); /* Box shadow */
+        }
     </style>
 </head>
 <body>
@@ -63,6 +75,8 @@
             <p>Drag and drop an image here, or click to select a file</p>
         </div>
         <button class="submit-button">Check Ingredients</button>
+        <div id="response-text-display" class="response-text-display"></div>
+
     </main>
     <script>
         const dropzone = document.querySelector('.dropzone');
@@ -91,6 +105,15 @@
             xhr.onload = function() {
                 if (xhr.status === 200) {
                     alert('File uploaded successfully!');
+                    // Parse the JSON response
+                    const responseTextArray = JSON.parse(xhr.responseText);
+
+                    // Convert the array to a string with line breaks
+                    const responseText = responseTextArray.join('<br>');
+
+                    // Display the response text in the text display box
+                    const responseTextDisplay = document.getElementById('response-text-display');
+                    responseTextDisplay.innerHTML = responseText;
                 } else {
                     alert('Error uploading file. Please try again.');
                 }
@@ -106,6 +129,25 @@
             fileInput.onchange = handleDrop;
             fileInput.click();
         }
+
+        function displayResponseText(responseText) {
+            const responseContainer = document.querySelector('.response-container');
+            responseContainer.innerHTML = '';
+
+            const responseList = document.createElement('ul');
+            responseText.forEach(text => {
+                const listItem = document.createElement('li');
+                listItem.textContent = text;
+                responseList.appendChild(listItem);
+            });
+
+            responseContainer.appendChild(responseList);
+        }
+
     </script>
+
+
+
+
 </body>
 </html>

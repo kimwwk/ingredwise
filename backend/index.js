@@ -1,8 +1,12 @@
 const express = require("express");
 const multer = require("multer");
 const axios = require("axios");
+const path = require("path");
 
 const app = express();
+// Set up the static file serving
+const frontendPath = path.join(__dirname, "..", "frontend"); // Update the path to point to the frontend directory
+app.use(express.static(frontendPath));
 
 // Set up multer to handle file uploads
 const upload = multer();
