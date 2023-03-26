@@ -65,6 +65,20 @@
       }
     </style>
   </head>
+  <!-- Google tag (gtag.js) -->
+  <script
+    async
+    src="https://www.googletagmanager.com/gtag/js?id=G-EW6S7V9MHB"
+  ></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+    gtag("js", new Date());
+
+    gtag("config", "G-EW6S7V9MHB");
+  </script>
   <body>
     <header>
       <h1>Ingredient Checker</h1>
@@ -144,7 +158,6 @@
         fileInput.onchange = handleDrop;
         fileInput.click();
       }
-
     </script>
   </body>
 </html>
