@@ -1,19 +1,15 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
+import DropZone from "../component/DropZone";
+import Loading from "../component/Loading";
+import NutritionContent from "../component/NutritionContent";
 
 function App() {
   const fileInputRef = useRef(null);
-
-  function displayResponseText(responseText) {
-    const responseContainer = document.querySelector("#response-text-display");
-    responseContainer.innerHTML = "";
-
-    const responseTextString = JSON.stringify(responseText, null, 2); // Stringify the response with indentation
-    const responseTextElement = document.createElement("pre");
-    responseTextElement.textContent = responseTextString;
-    responseContainer.appendChild(responseTextElement);
-  }
+  const [result, setResult] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   function uploadFile(file) {
+    setLoading(true);
     const formData = new FormData();
     formData.append("file", file);
     const xhr = new XMLHttpRequest();
@@ -22,10 +18,11 @@ function App() {
       if (xhr.status === 200) {
         // alert("File uploaded successfully!");
         const responseText = JSON.parse(xhr.responseText);
-        displayResponseText(responseText);
+        setResult(responseText);
       } else {
         alert("Error uploading file. Please try again.");
       }
+      setLoading(false);
     };
     xhr.send(formData);
   }
@@ -46,9 +43,7 @@ function App() {
         <h2>Upload, Identify & Review Ingredients</h2>
       </header>
       <main>
-        <div class="dropzone">
-          <p>Drag and drop an image here, or click to select a file</p>
-        </div>
+        <br></br>
         <input
           type="file"
           ref={fileInputRef}
@@ -58,7 +53,12 @@ function App() {
         <button class="submit-button" onClick={handleClick}>
           Check Ingredients
         </button>
-        <div id="response-text-display" class="response-text-display"></div>
+        <br></br>
+        <DropZone />
+        {loading && <Loading />}
+        {result && (
+          <NutritionContent nutritionResult={result.nutritionResult} />
+        )}
       </main>
     </>
   );
