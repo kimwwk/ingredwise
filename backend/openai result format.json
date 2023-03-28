@@ -1,20 +1,56 @@
 {
-  "nutrition_facts": {
-    "calories": 160,
-    "fat": "12 g",
-    "saturated_fat": "4.5 g",
-    "trans_fat": "0.1 g",
-    "cholesterol": "40 mg",
-    "sodium": "640 mg",
-    "carbohydrates": "3 g",
-    "fiber": "0 g",
-    "sugars": "0 g",
-    "protein": "9 g",
-    "vitamin_a": "N/A",
-    "vitamin_c": "N/A",
-    "calcium": "N/A",
-    "iron": "N/A"
-  },
+  "nutrition": [
+    {
+      "name":"calories",
+      "amount":"160",
+      "unit":"kJ"
+    },
+    {
+      "name":"fat",
+      "amount":"12",
+      "unit":"g"
+    },
+    {
+      "name":"saturated_fat",
+      "amount":"4.5",
+      "unit":"g"
+    },
+    {
+      "name":"trans_fat",
+      "amount":"0.1",
+      "unit":"g"
+    },
+    {
+      "name":"sodium",
+      "amount":"12",
+      "unit":"mg"
+    },
+    {
+      "name":"carbohydrates",
+      "amount":"30",
+      "unit":"g"
+    },
+    {
+      "name":"sugars",
+      "amount":"3",
+      "unit":"g"
+    },
+    {
+      "name":"sugars",
+      "amount":"3",
+      "unit":"g"
+    },
+    {
+      "name":"fiber",
+      "amount":"0",
+      "unit":"g"
+    },
+    {
+      "name": "vitamin_a",
+      "amount":"0",
+      "unit":"mg"
+    }
+  ],
   "ingredients": [
     "pork and beef",
     "water",
