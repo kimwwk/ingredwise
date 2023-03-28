@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import axios from "axios";
+// import axios from "axios";
 import { useDropzone } from "react-dropzone";
 import { FiUpload } from "react-icons/fi";
 
-const DropZone = () => {
+const DropZone = ({ handleFileUpload }) => {
   const [uploading, setUploading] = useState(false);
   const [uploadError, setUploadError] = useState(null);
 
@@ -13,23 +13,24 @@ const DropZone = () => {
     formData.append("file", acceptedFiles[0]);
 
     // Set up request config
-    const config = {
-      headers: {
-        "content-type": "multipart/form-data",
-      },
-    };
+    // const config = {
+    //   headers: {
+    //     "content-type": "multipart/form-data",
+    //   },
+    // };
 
     // Set loading state
     setUploading(true);
 
     try {
       // Send request to server
-      const response = await axios.post(
-        "/api/ingredient-check",
-        formData,
-        config
-      );
-      console.log(response.data);
+      // const response = await axios.post(
+      //   "/api/ingredient-check",
+      //   formData,
+      //   config
+      // );
+      // console.log(response.data);
+      handleFileUpload(acceptedFiles[0]);
     } catch (error) {
       console.error(error);
       setUploadError("An error occurred while uploading the file.");

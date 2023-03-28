@@ -1,12 +1,13 @@
-import React, { useRef, useState } from "react";
-import DropZone from "../component/DropZone";
+import React, { useState } from "react";
+import HowToUse from "../component/HowToUse";
+import UploadImage from "../component/UploadImage";
 import Loading from "../component/Loading";
 import NutritionContent from "../component/NutritionContent";
 
-function App() {
-  const fileInputRef = useRef(null);
+const HomePage = () => {
   const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [showHowToUse, setShowHowToUse] = useState(false);
 
   function uploadFile(file) {
     setLoading(true);
@@ -27,41 +28,31 @@ function App() {
     xhr.send(formData);
   }
 
-  const handleClick = () => {
-    fileInputRef.current.click();
-  };
-
-  const handleFileUpload = () => {
-    const file = fileInputRef.current.files[0];
-    uploadFile(file);
-  };
-
   return (
-    <>
-      <header>
-        <h1>Ingredient Checker</h1>
-        <h2>Upload, Identify & Review Ingredients</h2>
-      </header>
-      <main>
-        <br></br>
-        <input
-          type="file"
-          ref={fileInputRef}
-          style={{ display: "none" }}
-          onChange={handleFileUpload}
-        />
-        <button class="submit-button" onClick={handleClick}>
-          Check Ingredients
-        </button>
-        <br></br>
-        <DropZone />
-        {loading && <Loading />}
-        {result && (
-          <NutritionContent nutritionResult={result.nutritionResult} />
-        )}
-      </main>
-    </>
+    <div className="flex flex-col justify-center items-center h-screen">
+      <h1 className="text-5xl font-bold mb-6">Welcome to Nutrition Analyzer</h1>
+      <p className="text-xl text-center mb-8">
+        Upload a photo of the nutrition fact label of your food product and
+        we'll analyze it for you!
+      </p>
+      <button
+        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+        onClick={() => setShowHowToUse(!showHowToUse)}
+      >
+        {showHowToUse ? "Hide How to Use" : "Show How to Use"}
+      </button>
+      {showHowToUse && <HowToUse />}
+      {showHowToUse || (
+        <>
+          {result || <UploadImage handleFileUpload={uploadFile} />}
+          {loading && <Loading />}
+          {result && (
+            <NutritionContent nutritionResult={result.nutritionResult} />
+          )}
+        </>
+      )}
+    </div>
   );
-}
+};
 
-export default App;
+export default HomePage;
