@@ -1,6 +1,6 @@
 import React from "react";
 
-const NutritionContent = ({ nutritionResult }) => {
+const NutritionContent = ({ nutritionResult, suggestion }) => {
   const { nutrition, per_serving_size, ingredients, additional_info } =
     nutritionResult;
 
@@ -30,8 +30,8 @@ const NutritionContent = ({ nutritionResult }) => {
         <div className="text-gray-600 mb-2">
           MSG Free: {additional_info.msg_free ? "Yes" : "No"}
         </div>
+        <div className="font-bold text-gray-600 mb-2">Ingredients</div>
         <div className="text-gray-600 mb-2">
-          Ingredients:{" "}
           {ingredients.map((ingredient, index) => (
             <React.Fragment key={index}>
               {index > 0 && ", "}
@@ -39,6 +39,8 @@ const NutritionContent = ({ nutritionResult }) => {
             </React.Fragment>
           ))}
         </div>
+        <div className="font-bold text-gray-600 mb-2">Suggestions</div>
+        <div className="text-gray-600 mb-2">{suggestion}</div>
       </div>
     </div>
   );

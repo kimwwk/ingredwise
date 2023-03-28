@@ -44,10 +44,13 @@ const HomePage = () => {
       {showHowToUse && <HowToUse />}
       {showHowToUse || (
         <>
-          {result || <UploadImage handleFileUpload={uploadFile} />}
+          {result == null && <UploadImage handleFileUpload={uploadFile} />}
           {loading && <Loading />}
-          {result && (
-            <NutritionContent nutritionResult={result.nutritionResult} />
+          {result != null && (
+            <NutritionContent
+              nutritionResult={result.nutritionResult}
+              suggestion={result.suggestion}
+            />
           )}
         </>
       )}
