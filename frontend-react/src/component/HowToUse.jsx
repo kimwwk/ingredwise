@@ -13,7 +13,7 @@ const HowToUse = () => {
           <p className="text-gray-600">It's simple! Just follow these steps:</p>
         </div>
         <div className="flex flex-wrap justify-center">
-          <div className="max-w-sm rounded overflow-hidden shadow-lg m-4">
+          <div className="max-w-sm rounded overflow-hidden shadow-lg m-4 bg-white">
             <div className="px-6 py-4">
               <div className="flex items-center mb-2">
                 <div className="flex-shrink-0">
@@ -29,7 +29,7 @@ const HowToUse = () => {
               </div>
             </div>
           </div>
-          <div className="max-w-sm rounded overflow-hidden shadow-lg m-4">
+          <div className="max-w-sm rounded overflow-hidden shadow-lg m-4 bg-white">
             <div className="px-6 py-4">
               <div className="flex items-center mb-2">
                 <div className="flex-shrink-0">
@@ -45,7 +45,7 @@ const HowToUse = () => {
               </div>
             </div>
           </div>
-          <div className="max-w-sm rounded overflow-hidden shadow-lg m-4">
+          <div className="max-w-sm rounded overflow-hidden shadow-lg m-4 bg-white">
             <div className="px-6 py-4">
               <div className="flex items-center mb-2">
                 <div className="flex-shrink-0">
@@ -62,7 +62,7 @@ const HowToUse = () => {
               </div>
             </div>
           </div>
-          <div className="max-w-sm rounded overflow-hidden shadow-lg m-4">
+          <div className="max-w-sm rounded overflow-hidden shadow-lg m-4 bg-white">
             <div className="px-6 py-4">
               <div className="flex items-center mb-2">
                 <div className="flex-shrink-0">
