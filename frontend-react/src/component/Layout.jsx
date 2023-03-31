@@ -1,8 +1,11 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 import { Link, Outlet } from "react-router-dom";
 import { FaHome, FaCog } from "react-icons/fa";
 
 const Layout = () => {
+  const { t } = useTranslation();
+
   return (
     <div className="bg-light-beige min-h-screen">
       <nav className="bg-muted-coral">
@@ -14,7 +17,9 @@ const Layout = () => {
                 className="flex-shrink-0 text-white flex items-center space-x-1"
               >
                 <FaHome className="text-soft-teal w-6 h-6" />
-                <span className="text-xl font-semibold">IngredWise</span>
+                <span className="text-xl font-semibold">
+                  {t("portal-name")}
+                </span>
               </Link>
             </div>
             <div className="text-soft-teal">
