@@ -64,17 +64,11 @@ const NutritionAnalyzer = () => {
           I wanna know how to use
         </button>
       </div>
-      <div className="flex flex-wrap justify-between items-center m-8">
-        <div className="w-full md:w-1/2 md:pr-4 mb-4 md:mb-0">
+      <div className="container mx-auto">
+        <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4">
           <UploadImage handleFileUpload={uploadFile} />
-        </div>
-        <div className="w-full md:w-1/2 md:pr-4 mb-4 md:mb-0">
           <FoodShowcase image={food1} />
-        </div>
-        <div className="w-full md:w-1/2 md:pr-4 mb-4 md:mb-0">
           <FoodShowcase image={food2} />
-        </div>
-        <div className="w-full md:w-1/2 md:pr-4 mb-4 md:mb-0">
           <FoodShowcase image={nutritionFacts} />
         </div>
       </div>

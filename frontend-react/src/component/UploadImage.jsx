@@ -6,7 +6,7 @@ const UploadImage = ({ handleFileUpload }) => {
   return (
     <section>
       <div className="flex flex-wrap justify-center">
-        <div className="max-w-lg rounded overflow-hidden shadow-lg m-4 bg-white">
+        <div className="max-w-lg rounded-md overflow-hidden shadow-lg m-4 bg-white">
           <div className="px-6 py-4 h-80">
             <div className="flex items-center mb-4">
               <div className="flex-shrink-0">
