@@ -2,6 +2,7 @@ import React from "react";
 import { useTranslation } from "react-i18next";
 import { Link, Outlet } from "react-router-dom";
 import { FaHome, FaCog } from "react-icons/fa";
+import LanguageToggle from "./LanguageToggle";
 
 const Layout = () => {
   const { t } = useTranslation();
@@ -22,9 +23,14 @@ const Layout = () => {
                 </span>
               </Link>
             </div>
-            <div className="text-soft-teal">
-              {/* Add settings icon or other navigation elements here */}
-              <FaCog className="w-6 h-6 cursor-pointer" />
+            {/* Add settings icon or other navigation elements here */}
+            <div className="flex items-center space-x-4">
+              <div className="bg-soft-teal rounded-full p-1 hover:bg-olive-green">
+                <LanguageToggle />
+              </div>
+              <div className="bg-soft-teal rounded-full p-1 hover:bg-olive-green">
+                <FaCog className="w-6 h-6 cursor-pointer text-white" />
+              </div>
             </div>
           </div>
         </div>

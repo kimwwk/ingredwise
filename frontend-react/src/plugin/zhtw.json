@@ -1,0 +1,18 @@
+{
+  "portal-name": "營養賢達",
+  "home-header-title": "營養分析器 - 使用營養賢達分析食品標籤",
+  "home-header-description": "上傳您食品的營養標籤照片，我們的AI營養分析器將為您進行分析，並提供個性化建議！",
+  "nutrition-result-loading-title": "請稍候！",
+  "nutrition-result-loading-description": "再等幾秒鐘，我們將完成您的營養標籤分析...",
+  "nutrition-result-title": "營養分析結果",
+  "how_to_use_title": "如何使用營養賢達營養分析器",
+  "how_to_use_subtitle": "操作簡單！只需按照以下步驟：",
+  "how_to_use_step1_title": "拍攝清晰照片",
+  "how_to_use_step1_description": "拍攝您想要分析的食品營養標籤的清晰照片。",
+  "how_to_use_step2_title": "上傳照片",
+  "how_to_use_step2_description": "將照片上傳至我們的營養分析器，稍等幾秒鐘以完成分析。",
+  "how_to_use_step3_title": "查看結果",
+  "how_to_use_step3_description": "營養賢達將顯示分析後的營養標籤信息，並提供由我們先進的AI技術生成的實時個性化建議。",
+  "how_to_use_step4_title": "關於準確性的說明",
+  "how_to_use_step4_description": "儘管我們力求提供準確信息，但請注意，我們的服務並非完美，提供的信息僅供參考。在制定飲食計劃時，請務必諮詢專業醫護人員的意見。"
+}

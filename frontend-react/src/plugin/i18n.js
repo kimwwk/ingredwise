@@ -1,10 +1,14 @@
 import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
 import translationEn from "./en.json";
+import translationZh from "./zhtw.json";
 
 const resources = {
   en: {
     translation: translationEn,
+  },
+  zhtw: {
+    translation: translationZh,
   },
 };
 
