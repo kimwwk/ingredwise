@@ -71,7 +71,7 @@ async function getSuggestions(information) {
   const OPENAI_ENDPOINT = "***REMOVED***";
   const OPENAI_API_KEY = "***REMOVED***";
 
-  const prompts = `OCR text:\n${information}\n\nbased on the info, any risks from food safety and any suggestions?`;
+  const prompts = `OCR text:\n${information}\n\nbased on the info, analyse the food ingredients, list out which and why the ingredients is healthy to intake or should be avoid for normal person?`;
 
   // const configuration = new Configuration({
   //   organization: "YOUR_ORG_ID",
