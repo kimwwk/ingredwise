@@ -7,11 +7,30 @@ on:
     paths:
       - "frontend-react/**"
       - "backend/**"
+      - ".github/**"
 
 jobs:
+  check_changes:
+    runs-on: ubuntu-latest
+    outputs:
+      frontend_changed: ${{ steps.frontend_changed.outputs.changed }}
+      backend_changed: ${{ steps.backend_changed.outputs.changed }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Check if frontend files have changed
+        id: frontend_changed
+        run: |
+          if git diff --name-only HEAD^ HEAD | grep -q "^frontend-react/"; then
+            echo "::set-output name=changed::true"
+          else
+            echo "::set-output name=changed::false"
+          fi
   deploy_frontend:
     runs-on: ubuntu-latest
-    if: "contains(toJSON(github.event.commits).*.modified, 'frontend-react/')"
+    needs: check_changes
+    if: needs.check_changes.outputs.frontend_changed == 'true'
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
@@ -42,7 +61,6 @@ jobs:
 
   deploy_backend:
     runs-on: ubuntu-latest
-    if: "contains(toJSON(github.event.commits).*.modified, 'backend/')"
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
