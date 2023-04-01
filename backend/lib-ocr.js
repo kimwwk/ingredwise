@@ -23,24 +23,23 @@ function parseOCRJson(json) {
 
 // Get ocr result
 async function getOcrResult(file) {
-  try {
-    const response = await axios({
-      method: "post",
-      url: OCR_ENDPOINT,
-      headers: {
-        "Content-Type": "application/octet-stream",
-        "Ocp-Apim-Subscription-Key": OCR_API_KEY,
-      },
-      data: file.buffer,
-    });
+  const response = await axios({
+    method: "post",
+    url: OCR_ENDPOINT,
+    headers: {
+      "Content-Type": "application/octet-stream",
+      "Ocp-Apim-Subscription-Key": OCR_API_KEY,
+    },
+    data: file.buffer,
+  });
 
-    const result = parseOCRJson(response.data);
-
-    return result;
-  } catch (error) {
-    console.error(error);
-    return error;
+  if (response.status != 200) {
+    throw new Error("Failed to fetch from OpenAI API");
   }
+
+  const result = parseOCRJson(response.data);
+
+  return result;
 }
 
 export { getOcrResult };

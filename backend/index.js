@@ -19,20 +19,25 @@ const upload = multer();
 
 // Define the /api/ingredient-check endpoint
 app.post("/api/ingredient-check", upload.single("file"), async (req, res) => {
-  // Handle the file upload
-  const file = req.file;
+  try {
+    // Handle the file upload
+    const file = req.file;
 
-  const ocrResult = await getOcrResult(file);
-  console.info(ocrResult);
+    const ocrResult = await getOcrResult(file);
+    console.info(ocrResult);
 
-  const openAiResult = await getNutritionInfoJson(ocrResult);
-  console.info(openAiResult);
+    const openAiResult = await getNutritionInfoJson(ocrResult);
+    console.info(openAiResult);
 
-  const openAiResult2 = await getSuggestions(ocrResult);
-  console.info(openAiResult2);
+    const openAiResult2 = await getSuggestions(ocrResult);
+    console.info(openAiResult2);
 
-  // Send a response
-  res.send({ nutritionResult: openAiResult, suggestion: openAiResult2 });
+    // Send a response
+    res.send({ nutritionResult: openAiResult, suggestion: openAiResult2 });
+  } catch (error) {
+    console.error("An error occurred:", error);
+    res.status(500).send({ message: "An error occurred during the process." });
+  }
 });
 
 // Start the server
