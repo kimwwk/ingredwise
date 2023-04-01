@@ -18,6 +18,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
+        with:
+          fetch-depth: 2
 
       - name: Check if frontend files have changed
         id: frontend_changed
@@ -27,10 +29,9 @@ jobs:
           else
             echo "::set-output name=changed::false"
           fi
+
   deploy_frontend:
     runs-on: ubuntu-latest
-    needs: check_changes
-    if: needs.check_changes.outputs.frontend_changed == 'true'
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
