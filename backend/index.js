@@ -1,9 +1,14 @@
-const express = require("express");
-const multer = require("multer");
-const axios = require("axios");
-// const path = require("path");
+import express from "express";
+import multer from "multer";
+import axios from "axios";
 
+import { getOcrResult } from "./lib-ocr.js";
+
+// Express app initialization
 const app = express();
+
+// TODO: env file
+// require('dotenv').config();
 
 // TODO: Set up the static file serving
 // const frontendPath = path.join(__dirname, "..", "frontend"); // Update the path to point to the frontend directory
@@ -103,56 +108,12 @@ async function getSuggestions(information) {
   return result.choices[0]?.message.content;
 }
 
-//Parse and concatenate the text for the OCR response
-function parseOCRJson(json) {
-  const result = [];
-
-  for (const region of json.regions) {
-    for (const line of region.lines) {
-      let lineText = "";
-      for (const word of line.words) {
-        lineText += " " + word.text;
-      }
-      result.push(lineText.trim());
-    }
-  }
-
-  return result;
-}
-// TODO: env file
-// require('dotenv').config();
-
-const API_KEY = "***REMOVED***"; // replace with your actual API key
-const ENDPOINT =
-  "***REMOVED***";
-
-async function checkIngredients(file) {
-  try {
-    const response = await axios({
-      method: "post",
-      url: ENDPOINT,
-      headers: {
-        "Content-Type": "application/octet-stream",
-        "Ocp-Apim-Subscription-Key": API_KEY,
-      },
-      data: file.buffer,
-    });
-
-    const result = parseOCRJson(response.data);
-
-    return result;
-  } catch (error) {
-    console.error(error);
-    return error;
-  }
-}
-
 // Define the /api/ingredient-check endpoint
 app.post("/api/ingredient-check", upload.single("file"), async (req, res) => {
   // Handle the file upload
   const file = req.file;
 
-  const ocrResult = await checkIngredients(file);
+  const ocrResult = await getOcrResult(file);
   console.info(ocrResult);
 
   const openAiResult = await getNutritionInfoJson(ocrResult);
