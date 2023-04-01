@@ -11,7 +11,7 @@ on:
 jobs:
   deploy_frontend:
     runs-on: ubuntu-latest
-    if: "contains(github.event.head_commit.message, '[skip backend]') == false || contains(toJSON(github.event.commits).*.modified, 'frontend-react/')"
+    if: "contains(toJSON(github.event.commits).*.modified, 'frontend-react/')"
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
@@ -42,7 +42,7 @@ jobs:
 
   deploy_backend:
     runs-on: ubuntu-latest
-    if: "contains(github.event.head_commit.message, '[skip frontend]') == false || contains(toJSON(github.event.commits).*.modified, 'backend/')"
+    if: "contains(toJSON(github.event.commits).*.modified, 'backend/')"
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
