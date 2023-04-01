@@ -4,35 +4,64 @@ on:
   push:
     branches:
       - main
+    paths:
+      - "frontend-react/**"
+      - "backend/**"
 
 jobs:
-  build_and_deploy:
+  deploy_frontend:
     runs-on: ubuntu-latest
-
+    if: "contains(github.event.head_commit.message, '[skip backend]') == false || contains(toJSON(github.event.commits).*.modified, 'frontend-react/')"
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
+      - name: Checkout repository
+        uses: actions/checkout@v2
 
-    - name: Set up Node.js
-      uses: actions/setup-node@v2
-      with:
-        node-version: 18
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 18
 
-    - name: Install dependencies
-      run: npm ci --prefix frontend-react
+      - name: Install dependencies
+        run: npm ci --prefix frontend-react
 
-    - name: Build React app
-      run: npm run build --prefix frontend-react
+      - name: Build React app
+        run: npm run build --prefix frontend-react
 
-    - name: Install rsync
-      run: sudo apt-get install rsync
+      - name: Install rsync
+        run: sudo apt-get install rsync
 
-    - name: Transfer build folder to DigitalOcean Droplet
-      env:
-        DROPLET_SSH_PRIVATE_KEY: ${{ secrets.DROPLET_SSH_PRIVATE_KEY }}
-        DROPLET_IP_ADDRESS: ${{ secrets.DROPLET_IP_ADDRESS }}
-      run: |
-        echo "$DROPLET_SSH_PRIVATE_KEY" > private_key
-        chmod 600 private_key
-        rsync -avz -e "ssh -i private_key -o StrictHostKeyChecking=no" --delete frontend-react/build/ root@$DROPLET_IP_ADDRESS:/var/www/html/
-        rm -f private_key
+      - name: Transfer build folder to DigitalOcean Droplet
+        env:
+          DROPLET_SSH_PRIVATE_KEY: ${{ secrets.DROPLET_SSH_PRIVATE_KEY }}
+          DROPLET_IP_ADDRESS: ${{ secrets.DROPLET_IP_ADDRESS }}
+        run: |
+          echo "$DROPLET_SSH_PRIVATE_KEY" > private_key
+          chmod 600 private_key
+          rsync -avz -e "ssh -i private_key -o StrictHostKeyChecking=no" --delete frontend-react/build/ root@$DROPLET_IP_ADDRESS:/var/www/html/
+          rm -f private_key
+
+  deploy_backend:
+    runs-on: ubuntu-latest
+    if: "contains(github.event.head_commit.message, '[skip frontend]') == false || contains(toJSON(github.event.commits).*.modified, 'backend/')"
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 18
+
+      - name: Install dependencies
+        run: npm ci --prefix backend
+
+      - name: Transfer backend folder to DigitalOcean Droplet
+        env:
+          DROPLET_SSH_PRIVATE_KEY: ${{ secrets.DROPLET_SSH_PRIVATE_KEY }}
+          DROPLET_IP_ADDRESS: ${{ secrets.DROPLET_IP_ADDRESS }}
+        run: |
+          echo "$DROPLET_SSH_PRIVATE_KEY" > private_key
+          chmod 600 private_key
+          rsync -avz -e "ssh -i private_key -o StrictHostKeyChecking=no" --delete backend/ root@$DROPLET_IP_ADDRESS:~/my-express-server/
+          ssh -i private_key -o StrictHostKeyChecking=no root@$DROPLET_IP_ADDRESS 'cd ~/my-express-server/ && pm2 start --name=backend index.js'
+          rm -f
