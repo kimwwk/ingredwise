@@ -18,11 +18,12 @@ async function getNutritionInfoJson(ocrText) {
 
   const prompts = `OCR text:\n${ocrText}
   ---
-  Generate a JSON object with the following 3 objects while naming convention is snake case (snake_case)
+  Generate a JSON object with the following 3 objects
 
   1.
-  "nutrition" key (array of objects), each require to contain
-  - "name" (string) represents the nutrient name (e.g., "vitamin_b1", "vitamin_c", "saturated_fat", "trans_fat")
+  "nutrition" key (array of objects),naming convention is snake case (snake_case), key name must pick from the following list and align with the order in the list
+  calories, total_fat, saturated_fat, trans_fat, cholesterol, sodium, carbohydrate, sugars, protein, fiber, iron,calcium,potassium,magnesium,zinc,phosphorus,vitamin_a, vitamin_c, vitamin_d, vitamin_e, vitamin_k, vitamin_b1, vitamin_b2, vitamin_b3, vitamin_b5, vitamin_b6, vitamin_b7, vitamin_b9, vitamin_b12)
+  require to contain:
   - "amount" (string) represents the amount of the nutrient (e.g., "160", "12", "4.5"), if there's none leave it empty ("")
   - "unit" (string) represents the unit of measurement (e.g., "kJ", "g", "mg"), if there's no unit leave it empty ("")
 
@@ -35,10 +36,9 @@ async function getNutritionInfoJson(ocrText) {
   "ingredients" key (array of strings) represents the product's ingredients (e.g., ["pork", "beef", "water"])
   
   4.
-  "additional_info" key (object) represents other information, optional to contain
+  "additional_info" key (object) represents other information, optional to contain in (string) or (boolean) type
   - "product" (string) 
   - "brand" (string) 
-  - "msg_free" (boolean) 
   `;
 
   const response = await axios({
