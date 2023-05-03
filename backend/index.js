@@ -10,10 +10,6 @@ const app = express();
 // TODO: env file
 // require('dotenv').config();
 
-// TODO: Set up the static file serving
-// const frontendPath = path.join(__dirname, "..", "frontend"); // Update the path to point to the frontend directory
-// app.use(express.static(frontendPath));
-
 // Set up multer to handle file uploads
 const upload = multer();
 
@@ -37,6 +33,34 @@ app.post("/api/ingredient-check", upload.single("file"), async (req, res) => {
   } catch (error) {
     console.error("An error occurred:", error);
     res.status(500).send({ message: "An error occurred during the process." });
+  }
+});
+
+// Dummy data
+const dummyData = {
+  shortUrl: "https://short.ly/xyz123",
+  longUrl: "https://example.com",
+};
+
+// POST request to shorten a long URL
+app.post("/shorten", (req, res) => {
+  const longUrl = req.body.url;
+
+  if (!longUrl) {
+    res.status(400).json({ error: "Please provide a URL" });
+  } else {
+    res.status(200).json({ shortUrl: dummyData.shortUrl });
+  }
+});
+
+// GET request to retrieve the long URL using a short URL
+app.get("/expand/:shortUrlCode", (req, res) => {
+  const shortUrlCode = req.params.shortUrlCode;
+
+  if (!shortUrlCode) {
+    res.status(400).json({ error: "Please provide a short URL code" });
+  } else {
+    res.status(200).json({ longUrl: dummyData.longUrl });
   }
 });
 
