@@ -10,26 +10,6 @@ on:
       - ".github/**"
 
 jobs:
-  check_changes:
-    runs-on: ubuntu-latest
-    outputs:
-      frontend_changed: ${{ steps.frontend_changed.outputs.changed }}
-      backend_changed: ${{ steps.backend_changed.outputs.changed }}
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-        with:
-          fetch-depth: 2
-
-      - name: Check if frontend files have changed
-        id: frontend_changed
-        run: |
-          if git diff --name-only HEAD^ HEAD | grep -q "^frontend-react/"; then
-            echo "::set-output name=changed::true"
-          else
-            echo "::set-output name=changed::false"
-          fi
-
   deploy_frontend:
     runs-on: ubuntu-latest
     steps:
