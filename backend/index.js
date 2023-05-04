@@ -4,11 +4,13 @@ import multer from "multer";
 import { getOcrResult } from "./lib-ocr.js";
 import { getNutritionInfoJson, getSuggestions } from "./lib-openai.js";
 
+// TODO: env file
+// require('dotenv').config();
+
 // Express app initialization
 const app = express();
 
-// TODO: env file
-// require('dotenv').config();
+app.use(express.json());
 
 // Set up multer to handle file uploads
 const upload = multer();
