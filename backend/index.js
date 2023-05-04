@@ -39,11 +39,11 @@ app.post("/api/ingredient-check", upload.single("file"), async (req, res) => {
 // Dummy data
 const dummyData = {
   shortUrl: "https://short.ly/xyz123",
-  longUrl: "https://example.com",
+  longUrl: "https://www.google.com/search?client=firefox-b-d&q=shorten+url",
 };
 
 // POST request to shorten a long URL
-app.post("/shorten", (req, res) => {
+app.post("/api/shorten", (req, res) => {
   const longUrl = req.body.url;
 
   if (!longUrl) {
@@ -54,7 +54,7 @@ app.post("/shorten", (req, res) => {
 });
 
 // GET request to retrieve the long URL using a short URL
-app.get("/expand/:shortUrlCode", (req, res) => {
+app.get("/api/expand/:shortUrlCode", (req, res) => {
   const shortUrlCode = req.params.shortUrlCode;
 
   if (!shortUrlCode) {
