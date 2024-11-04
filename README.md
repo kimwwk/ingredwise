@@ -1,70 +1,58 @@
-# ingredwise
+# IngredWise: AI-Powered Nutrition Label Analyzer
 
-## Ideas
+This repository contains a full-stack application that helps users analyze nutrition labels on food products using AI. The application utilizes Optical Character Recognition (OCR) to extract text from images of nutrition labels and then leverages OpenAI's ChatGPT to analyze the extracted information.
 
-1. Can redirect ppl to our blog
-2. Or take sponsorship from other clients to write blog Base on the food health or product
+## How it Works
 
-## CLI
+1. **Image Upload:** Users upload an image of a nutrition label through the frontend interface.
+2. **OCR Processing:** The backend uses OCR technology (currently unspecified in the provided code, you'll need to add the OCR library you choose) to extract text from the uploaded image.
+3. **AI Analysis:** The extracted text is sent to OpenAI's ChatGPT for analysis. ChatGPT is used to interpret the nutritional information, provide insights, and answer user queries about the product.
+4. **Results Display:** The analysis results from ChatGPT are displayed to the user in a clear and understandable format on the frontend.
 
-```bash
-apt install nginx nodejs npm
+## Technologies Used
 
-ufw app list
+- **Frontend:** React, React Router, Axios, React Dropzone, i18next
+- **Backend:** Node.js, Express, Multer, Axios
+- **AI:** OpenAI ChatGPT
+- **OCR:** Cognitive Services from Azure
 
-ufw status
+## Repository Structure
 
-ufw allow 'Nginx HTTP'
+- **`backend/`:** Contains the Node.js backend code.
+  - `index.js`: Main backend file.
+- **`frontend-react/`:** Contains the React frontend code.
+  - `src/`: Source code for the React application.
 
-ufw enable
+## Getting Started
 
-systemctl status nginx
+### Prerequisites
 
-systemctl start nginx
-systemctl stop nginx
-systemctl reload nginx
+- Node.js and npm installed
+- OpenAI API key
 
-# get your own ip address
-curl -4 icanhazip.com
+### Installation
 
-fuser 3000/tcp
+1. Clone the repository: `git clone <repository_name>`
+2. Install backend dependencies: `cd backend && npm install`
+3. Install frontend dependencies: `cd frontend-react && npm install`
+4. Set up your API keys:
+   1. `const OCR_API_KEY = ""`
+   2. `const OCR_ENDPOINT = ""`
+   3. `const OPENAI_ENDPOINT = ""`
+   4. `const OPENAI_API_KEY = ""`
+5. Start the backend server: `npm start` (from the `backend` directory)
+6. Start the frontend development server: `npm start` (from the `frontend-react` directory)
 
-lsof -i :3000
+## Contributing
 
-# option -9 to force action
-kill $PID -9
+Contributions are welcome! Please feel free to open issues or submit pull requests.
 
-# nginx config
-nano /etc/nginx/sites-available/default
+## Monetization Ideas [Future]
 
-# nginx: the configuration file /etc/nginx/nginx.conf syntax is ok
-# nginx: configuration file /etc/nginx/nginx.conf test is successful
-nginx -t
+This application has the potential to be monetized through various avenues:
 
-ufw allow 'Nginx Full' && sudo ufw delete allow 'Nginx HTTP'
+- **Affiliate Marketing:** Redirect users to relevant product pages on online retailers (e.g., Amazon, health food stores) and earn commissions on sales.
+- **Sponsored Content:** Partner with health food companies or other relevant businesses to create sponsored blog posts or analyses.
+- **Premium Features:** Offer advanced features like personalized nutrition recommendations or in-depth ingredient analysis as a paid subscription.
 
-pm2 start --name=backend index.js
-
-pm2 list
-
-# To monitor logs, custom metrics, application information:
-pm2 monit
-
-# Load Balance 4 instances of api.js:
-pm2 start api.js -i 4
-
-# Monitor in production:
-pm2 monitor
-
-# Make pm2 auto-boot at server restart:
-pm2 startup
-
-```
-
-## Learn more
-
-ref link: https://coderrocketfuel.com/article/create-and-deploy-an-express-rest-api-to-a-digitalocean-server
-
-1. access control configuration
-   - do not create root ssh connection but user ssh connection
-2. configure DNS
+## License
